@@ -1,10 +1,10 @@
 import Foundation
-import Combine
+import Observation
 
-@MainActor
-class SearchViewModel: ObservableObject {
-    @Published var items: [String] = []
-    @Published var showingFruits = true
+@Observable
+class SearchViewModel {
+     var items: [String] = []
+     var showingFruits = true
 
     private let fruits = ["🍎 Яблуко", "🍌 Банан", "🍐 Груша", "🍊 Апельсин"]
     private let vegetables = ["🥒 Огірок", "🍅 Помідор", "🥕 Морква", "🌽 Кукурудза"]

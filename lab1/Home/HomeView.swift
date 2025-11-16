@@ -1,45 +1,46 @@
 import SwiftUI
 
 struct HomeView: View {
-    @StateObject private var viewModel = HomeViewModel()
+    @AppStorage("isDarkMode") private var isDarkMode = false
+    @State private var viewModel = HomeViewModel()
 
     var body: some View {
-        NavigationView {
-            VStack(spacing: 10) {
-                Text("Головна")
-                    .font(.largeTitle)
-                    .bold()
+        VStack(spacing: 10) {
+            Text("Головна")
+                .font(.largeTitle)
+                .bold()
 
-                Button(viewModel.isImagesVisible ? "Сховати картинки" : "Показати картинки") {
-                    viewModel.toggleImagesVisibility()
-                }
-                .buttonStyle(.borderedProminent)
-                .controlSize(.large)
-                .buttonBorderShape(.roundedRectangle)
-                .padding(.bottom)
+            Button(viewModel.isImagesVisible ? "Сховати картинки" : "Показати картинки") {
+                viewModel.toggleImagesVisibility()
+            }
+            .buttonStyle(.borderedProminent)
+            .controlSize(.large)
+            .buttonBorderShape(.roundedRectangle)
+            .padding(.bottom)
 
-                ScrollView {
-                    if viewModel.isImagesVisible {
-                        VStack(spacing: 20) {
-                            ForEach(viewModel.images) { imageItem in
-                                Image(imageItem.name)
-                                    .resizable()
-                                    .scaledToFit()
-                                    .cornerRadius(16)
-                                    .shadow(radius: 5)
-                                    .transition(.opacity.combined(with: .scale))
-                            }
+            ScrollView {
+                if viewModel.isImagesVisible {
+                    VStack(spacing: 20) {
+                        ForEach(viewModel.images) { imageItem in
+                            Image(imageItem.name)
+                                .resizable()
+                                .scaledToFit()
+                                .cornerRadius(16)
+                                .shadow(radius: 5)
+                                .transition(.opacity.combined(with: .scale))
                         }
-                        .padding()
-                        .animation(.easeInOut, value: viewModel.isImagesVisible)
                     }
+                    .padding()
+                    .animation(.easeInOut, value: viewModel.isImagesVisible)
                 }
             }
-            .padding()
+        }
+        .padding()
+        .onChange(of: isDarkMode) { oldValue, newValue in
+            viewModel.updateImages(isDarkMode: newValue)
+        }
+        .onAppear {
+            viewModel.updateImages(isDarkMode: isDarkMode)
         }
     }
-}
-
-#Preview("MainTabView") {
-    MainTabView()
 }

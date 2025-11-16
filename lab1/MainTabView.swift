@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct MainTabView: View {
+    
     var body: some View {
         TabView {
             HomeView()
@@ -19,6 +20,14 @@ struct MainTabView: View {
                 .tabItem {
                     Label("Пошук", systemImage: "magnifyingglass")
                 }
+            SettingsView()
+                .tabItem {
+                    Label("Налаштування", systemImage: "gearshape")
+                }
         }
     }
+}
+
+#Preview("MainTabView") {
+    MainTabView()
 }

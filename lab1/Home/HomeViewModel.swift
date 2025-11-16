@@ -1,19 +1,16 @@
 import Foundation
-import Combine
-@MainActor
-class HomeViewModel: ObservableObject {
-    @Published var images: [ImageItem] = []
-    @Published var isImagesVisible = false
+import Observation
 
-    init() {
-        loadLocalImages()
-    }
-
-    private func loadLocalImages() {
+@Observable
+class HomeViewModel {
+    var images: [ImageItem] = []
+    var isImagesVisible = false
+    
+    func updateImages(isDarkMode: Bool) {
         images = [
-            ImageItem(name: "photo1"),
-            ImageItem(name: "photo2"),
-            ImageItem(name: "photo3")
+            ImageItem(name: isDarkMode ? "photo4" : "photo1"),
+            ImageItem(name: isDarkMode ? "photo5" : "photo2"),
+            ImageItem(name: isDarkMode ? "photo6" : "photo3")
         ]
     }
 
