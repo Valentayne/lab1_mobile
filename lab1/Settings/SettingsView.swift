@@ -1,58 +1,67 @@
 import SwiftUI
-struct SettingsView: View {
-    @State private var viewModel = SettingsViewModel()
+    struct SettingsView: View {
+        @State private var viewModel = SettingsViewModel()
 
-    var body: some View {
-        NavigationStack {
-            List {
-                Section() {
-                    ForEach(viewModel.items_vertical) { item in
-                        NavigationLink(destination: buildDestination(item.destination)) {
+        var body: some View {
+            NavigationStack {
+                List {
+                    Section {
+                        buildSectionView()
+                    }
+                }
+                .listStyle(.insetGrouped)
+                .navigationTitle("Налаштування")
+            }
+        }
+        
+        @ViewBuilder
+        func buildSectionView() -> some View {
+            ForEach(viewModel.modules) { module in
+                switch module {
+
+                case .settings(let item):
+                    if let destination = item.destination {
+                        NavigationLink(destination: buildDestination(destination)) {
                             HStack {
                                 Image(systemName: item.icon)
                                     .foregroundStyle(item.color)
                                 Text(item.title)
                             }
                         }
+                    } else {
+                        HStack {
+                            Image(systemName: item.icon)
+                                .foregroundStyle(item.color)
+                            Text(item.title)
+                        }
                     }
-                }
 
-                Section("Горизонтальний список") {
+                case .helloween(let item):
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 16) {
-                            ForEach(viewModel.items_horizontal) { item in
-                                NavigationLink(destination: buildDestination(item.destination)) {
-                                    VStack {
-                                        Image(systemName: item.icon)
-                                            .resizable()
-                                            .frame(width: 40, height: 40)
-                                            .foregroundStyle(item.color)
-                                        Text(item.title)
-                                            .font(.caption)
-                                            .multilineTextAlignment(.center)
-                                    }
-                                    .padding()
-                                    .background(Color(.systemGray6))
-                                    .cornerRadius(10)
-                                }
+                            VStack {
+                                item.image
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 60, height: 60)
+                                Text(item.text)
                             }
+                            .padding()
+                            .background(Color.orange.opacity(0.2))
+                            .cornerRadius(10)
                         }
-                        .padding(.vertical, 8)
                     }
                 }
             }
-            .listStyle(.insetGrouped)
-            .navigationTitle("Налаштування")
         }
-    }
 
-    @ViewBuilder
-    private func buildDestination(_ destination: SettingsDestination) -> some View {
-        switch destination {
-        case .general:
-            GeneralSettingsView()
-        case .theme:
-            ThemeSettingsView()
+        @ViewBuilder
+        private func buildDestination(_ destination: SettingsDestination) -> some View {
+            switch destination {
+            case .general:
+                GeneralSettingsView()
+            case .theme:
+                ThemeSettingsView()
+            }
         }
-    }
 }

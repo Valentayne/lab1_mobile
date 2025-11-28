@@ -1,14 +1,15 @@
 import SwiftUI
 
-struct Settings: Identifiable {
+enum SettingsDestination {
+    case general
+    case theme
+}
+
+struct Settings: Identifiable, OrientableModule {
     let id = UUID()
     let icon: String
     let color: Color
     let title: String
-    let destination: SettingsDestination
-}
-
-enum SettingsDestination {
-    case general
-    case theme
+    let destination: SettingsDestination?
+    var orientation: Orientation
 }

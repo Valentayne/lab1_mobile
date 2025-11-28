@@ -3,27 +3,27 @@ import SwiftUI
 
 @Observable
 class SettingsViewModel {
-    var items_vertical: [Settings] = []
-    var items_horizontal: [Settings] = []
+    var modules: [Module] = []
 
     init() {
-        loadVerticalSettings()
-        loadHorizontalSettings()
+        loadItems()
     }
 
-    func loadVerticalSettings() {
-        items_vertical = [
-            Settings(icon: "gear", color: .blue, title: "Загальні налаштування", destination: .general),
-            Settings(icon: "paintbrush.fill", color: .purple, title: "Змінити тему", destination: .theme)
-        ]
-    }
+    func loadItems() {
+        modules = [
 
-    func loadHorizontalSettings() {
-        items_horizontal = [
-            Settings(icon: "gear", color: .blue, title: "Загальні налаштування", destination: .general),
-            Settings(icon: "paintbrush.fill", color: .purple, title: "Змінити тему", destination: .theme),
-            Settings(icon: "star.fill", color: .yellow, title: "Особливе", destination: .general),
-            Settings(icon: "moon.fill", color: .gray, title: "Темна тема", destination: .theme)
+            .settings(Settings(icon: "gear", color: .blue, title: "Загальні налаштування", destination: .general, orientation: .vertical)),
+            .settings(Settings(icon: "paintbrush.fill", color: .purple, title: "Змінити тему", destination: .theme, orientation: .vertical)),
+            .settings(Settings(icon: "applelogo", color: .red, title: "Яблуко", destination: nil, orientation: .vertical)),
+            .settings(Settings(icon: "leaf.fill", color: .green, title: "Груша", destination: nil, orientation: .vertical)),
+
+            .helloween(Helloween(text: "Ліхтарик", image: Image("photo1"), orientation: .horizontal)),
+            .helloween(Helloween(text: "Скелет", image: Image("photo2"), orientation: .horizontal)),
+            .helloween(Helloween(text: "Кіт у капелюсі", image: Image("photo3"), orientation: .horizontal)),
+            .helloween(Helloween(text: "Павук", image: Image("photo4"), orientation: .horizontal)),
+            .helloween(Helloween(text: "Привид", image: Image("photo5"), orientation: .horizontal)),
+            .helloween(Helloween(text: "Цукерки", image: Image("photo6"), orientation: .horizontal))
         ]
     }
 }
+
