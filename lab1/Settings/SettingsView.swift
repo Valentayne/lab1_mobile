@@ -1,60 +1,84 @@
 import SwiftUI
-    struct SettingsView: View {
-        @State private var viewModel = SettingsViewModel()
+struct SettingsView: View {
+    @State var viewModel = SettingsViewModel()
 
-        var body: some View {
-            NavigationStack {
-                List {
-                    Section {
-                        buildSectionView()
-                    }
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(spacing: 12) {
+                    buildSectionView()
                 }
-                .listStyle(.insetGrouped)
-                .navigationTitle("Налаштування")
+                .padding()
             }
+            .navigationTitle("Модулі")
         }
-        
-        @ViewBuilder
-        func buildSectionView() -> some View {
-            ForEach(viewModel.modules) { module in
-                switch module {
+    }
 
-                case .settings(let item):
-                    if let destination = item.destination {
-                        NavigationLink(destination: buildDestination(destination)) {
-                            HStack {
-                                Image(systemName: item.icon)
-                                    .foregroundStyle(item.color)
-                                Text(item.title)
-                            }
-                        }
-                    } else {
+    @ViewBuilder
+    func buildSectionView() -> some View {
+        ForEach(viewModel.groupedSections) { section in
+            switch section {
+            case .vertical(let settings):
+                // Якщо є destination → NavigationLink, інакше просто HStack
+                if let dest = settings.destination {
+                    NavigationLink(destination: buildDestination(dest)) {
                         HStack {
-                            Image(systemName: item.icon)
-                                .foregroundStyle(item.color)
-                            Text(item.title)
+                            Image(systemName: settings.icon)
+                                .foregroundStyle(settings.color)
+                                .frame(width: 28, height: 28)
+                            Text(settings.title)
+                                .foregroundColor(.primary)
+                            Spacer()
                         }
+                        .padding()
+                        .background(Color(.systemBackground))
+                        .cornerRadius(8)
+                        .shadow(color: Color.black.opacity(0.03), radius: 2, x: 0, y: 1)
                     }
+                } else {
+                    HStack {
+                        Image(systemName: settings.icon)
+                            .foregroundStyle(settings.color)
+                            .frame(width: 28, height: 28)
+                        Text(settings.title)
+                            .foregroundColor(.primary)
+                        Spacer()
+                    }
+                    .padding()
+                    .background(Color(.systemBackground))
+                    .cornerRadius(8)
+                    .shadow(color: Color.black.opacity(0.03), radius: 2, x: 0, y: 1)
+                }
 
-                case .helloween(let item):
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 16) {
+            case .horizontal(let items):
+                // Один ScrollView для усієї групи горизонтальних елементів
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 12) {
+                        ForEach(items) { h in
+                            // Якщо Helloween має destination (не у твоїй моделі зараз),
+                            // можна обернути в NavigationLink -- зараз рендеримо просто картку
                             VStack {
-                                item.image
+                                h.image
                                     .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 60, height: 60)
-                                Text(item.text)
+                                    .scaledToFill()
+                                    .frame(width: 100, height: 100)
+                                    .clipped()
+                                    .cornerRadius(8)
+                                Text(h.text)
+                                    .font(.caption)
+                                    .lineLimit(1)
                             }
-                            .padding()
-                            .background(Color.orange.opacity(0.2))
+                            .padding(8)
+                            .background(Color(.secondarySystemBackground))
                             .cornerRadius(10)
+                            .shadow(color: Color.black.opacity(0.02), radius: 2, x: 0, y: 1)
                         }
                     }
+                    .padding(.vertical, 4)
                 }
             }
         }
-
+    }
         @ViewBuilder
         private func buildDestination(_ destination: SettingsDestination) -> some View {
             switch destination {

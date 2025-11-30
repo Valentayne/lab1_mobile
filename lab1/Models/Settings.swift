@@ -11,5 +11,8 @@ struct Settings: Identifiable, OrientableModule {
     let color: Color
     let title: String
     let destination: SettingsDestination?
-    var orientation: Orientation
+    let orientation: Orientation
+
+    func asSettings() -> Settings? { self }
+    func asHelloween() -> Helloween? { nil }
 }
