@@ -13,6 +13,4 @@ struct Settings: Identifiable, OrientableModule {
     let destination: SettingsDestination?
     let orientation: Orientation
 
-    func asSettings() -> Settings? { self }
-    func asHelloween() -> Helloween? { nil }
 }

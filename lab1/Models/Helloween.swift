@@ -6,6 +6,4 @@ struct Helloween: Identifiable, OrientableModule {
     let image: Image
     let orientation: Orientation
 
-    func asSettings() -> Settings? { nil }
-    func asHelloween() -> Helloween? { self }
 }
